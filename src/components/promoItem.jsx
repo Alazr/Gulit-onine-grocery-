@@ -5,7 +5,7 @@ import {getImage} from '../shared/getImage'
 import {Link} from 'react-router-dom'
 function PromoItem({item}) {
     return (
-        <Link to={`/product/${item.id}`}>
+        <Link to={`/product/${item._id}`}>
         <PromoItemStyle>
         <div className="promo_detail">
             <h6>{item.name}</h6>

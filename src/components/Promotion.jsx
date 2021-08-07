@@ -8,7 +8,7 @@ function Promotion({title,data}) {
             <h4>{title}</h4>
             {
                 data.map(i=>(
-                    <PromoItem key={i.id} item={i}/>
+                    <PromoItem key={i._id} item={i}/>
                 ))
             }
         </PromotionStyle>

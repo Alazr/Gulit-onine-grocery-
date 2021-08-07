@@ -1,37 +1,37 @@
-import React,{useState} from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import SearchInput from '../shared/searchInput';
 import SelectInput from '../shared/selectInput';
-import {utilSearch,utilSort} from '../actions/utilAction'
 import { useDispatch, useSelector } from 'react-redux';
+import { searchUpdated } from '../store/ul'
 
 
 function MainHeader(props) {
 
-    const [data,setData] = useState("")
+    const [data, setData] = useState("")
     const dispatch = useDispatch()
-    const {filtLength,perPage,pageNum} = useSelector(state=>state.utils)
+    const { filtLength, perPage, pageNum } = useSelector(state => state.ui)
     const currentVal = (perPage * pageNum) > filtLength ? filtLength : (perPage * pageNum)
 
-    
-    const submitHandler = (e) =>{
+
+    const submitHandler = (e) => {
         e.preventDefault()
-        dispatch(utilSearch(data))
+        dispatch(searchUpdated(data))
     }
 
-    const changeHandler = ({target}) =>{
-        dispatch(utilSearch(target.value))
+    const changeHandler = ({ target }) => {
+        dispatch(searchUpdated(target.value))
         setData(target.value)
     }
 
     return (
         <HeaderContainer>
             <form onSubmit={submitHandler}>
-                <SearchInput data={data} onChange={changeHandler}/>
+                <SearchInput data={data} onChange={changeHandler} />
             </form>
-        <p>showing {currentVal} item out of {filtLength}</p>
-        <SelectInput/>
-    </HeaderContainer>
+            <p>showing {currentVal} item out of {filtLength}</p>
+            <SelectInput />
+        </HeaderContainer>
     );
 }
 
@@ -46,6 +46,13 @@ min-height:5rem;
         margin-left: 5rem;
         flex: 1;
     }
+    @media screen and (max-width:768px){
+    justify-content: space-between;
+    p{
+    display:none;
+    }
+
+}
 `
 
 export default MainHeader;

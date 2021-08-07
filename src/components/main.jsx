@@ -16,6 +16,7 @@ function Main(props) {
 
 const MainContainer = styled.div`
     width:90%;
+    max-width:1140px;
     margin:auto;
 `
 

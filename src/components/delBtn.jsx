@@ -1,17 +1,18 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import {RemoveFromCart} from '../actions/cartAction'
+import { itemRemoved, itemCleared } from '../store/cart'
 
 
-function DelBtn({id}) {
+function DelBtn({ id }) {
     const dispatch = useDispatch()
 
-    const deleteHandler = () =>{
-        if(id)
-        dispatch(RemoveFromCart(id))
-        else
-        dispatch(RemoveFromCart(null))
+    const deleteHandler = () => {
+        if (id)
+            dispatch(itemRemoved({ id }))
+        else {
+            dispatch(itemCleared())
+        }
     }
     return (
         <DelButton onClick={deleteHandler}>{id ? "Delete" : "DeleteAll"}</DelButton>

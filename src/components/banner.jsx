@@ -53,5 +53,13 @@ const BannerMainText = styled.div`
     h2{
         margin-top: 1rem;
     }
+    @media screen and (max-width:400px){
+    
+    h1{
+        margin-top:3rem;
+        font-size: 4.8rem;
+    }
+
+}
 `
 export default Banner;

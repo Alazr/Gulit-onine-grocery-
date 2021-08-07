@@ -9,11 +9,26 @@ const GlobalStyles = createGlobalStyle`
     }
     html{
         font-size: 62.5%;
+        @media screen and (max-width:768px){
+    
+            font-size: 58%;
+        
+    }
+        @media screen and (max-width:400px){
+    
+            font-size: 55%;
+        
+    }
     }
     body{
         line-height: 1.5;
         letter-spacing: 1px;
         font-family: 'Open Sans', sans-serif;
+        @media screen and (max-width:768px){
+    
+            overflow-x:hidden;
+
+}
     }
     #logo{
         font-family: 'Lobster', cursive;
@@ -52,6 +67,12 @@ const GlobalStyles = createGlobalStyle`
     /* li,button{
         transition: all 0.3s ease;
     } */
+
+    @media screen and (max-width:768px){
+        html{
+            font-size: 58%;
+        }
+    }
 `
 
 export default GlobalStyles;

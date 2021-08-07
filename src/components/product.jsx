@@ -1,39 +1,43 @@
-import React,{useEffect} from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components'
-import {getImage} from '../shared/getImage'
-import {Link, useLocation} from 'react-router-dom'
-import {AddToCart} from '../actions/cartAction'
-import { useDispatch,useSelector } from 'react-redux';
-import { useState } from 'react';
+import { getImage } from '../shared/getImage'
+import { Link, useLocation } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux';
 import Quantity from '../shared/quantity';
+import { itemAdded } from '../store/cart'
 // import { useEffect } from 'react';
-function Product({product}) {
-     const {pathname} = useLocation()
-     const detailpage = pathname !== "/"
-     const dispatch = useDispatch()
-     
-    //  const cartHandler = () =>{
-    //      dispatch(AddToCart(newProd))
+function Product({ product }) {
+    const { pathname } = useLocation()
+    const detailpage = pathname !== "/"
+    const dispatch = useDispatch()
+    const cart = useSelector(state => state.entities.cart)
 
-    //  }
+    const cartHandler = () => {
+        dispatch(itemAdded({ id: product._id, item: product }))
+
+    }
 
 
     return (
-        <Pro className={`${detailpage ? "detail-product":""}`}>
-               <Link to={`/product/${product.id}`}>
-        <img src={getImage(product.image)} alt="banner" />
-        <div className="img_detail">
-        <h5>{product.name}</h5>
-        {!detailpage &&(
-            <>
-        <p>Price:${product.price}</p>
-        
-          {/* <Button onClick={cartHandler}>Add To Cart</Button> */}
-        </>
-        )}
-        </div>
-        </Link>
-    </Pro>  
+        <Pro className={`${detailpage ? "detail-product" : "pro"}`}>
+            <Link to={`/product/${product._id}`}>
+                <img src={getImage(product.image)} alt="banner" />
+            </Link>
+            <div className="img_detail">
+                <h5>{product.name}</h5>
+                {!detailpage && (
+                    <>
+                        <p>Price:${product.price}</p>
+                        <CartContainer>
+                            {
+                                cart[product._id] ? <Quantity item={cart[product._id]} /> :
+                                    <Button onClick={cartHandler}>Add To Cart</Button>
+                            }
+                        </CartContainer>
+                    </>
+                )}
+            </div>
+        </Pro>
     );
 }
 
@@ -41,7 +45,7 @@ const Pro = styled.div`
     cursor:pointer;
     position: relative;
     margin:1rem;
-    height:35rem;
+    height:30rem;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
     transition: all 0.2s;
     &.detail-product{
@@ -52,10 +56,13 @@ const Pro = styled.div`
         img{
             height: 60%;
         }
+        h5{
+            font-size: 1.8rem;
+        }
     }
     img{
         width:100%;
-        height:25rem;
+        height:20rem;
         object-fit: cover;
     }
     .img_detail{
@@ -77,13 +84,16 @@ const Pro = styled.div`
     }
  
 `
+const CartContainer = styled.div`
+        position: absolute;
+    bottom: 5px;
+    right:5px;
+`
+
 
 const Button = styled.button`
     display: none;
     padding:0.5rem 1rem;
-    position: absolute;
-    bottom: 5px;
-    right:5px;
     background: none;
     border:1px solid #00C23D;
     cursor: pointer;

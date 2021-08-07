@@ -6,7 +6,7 @@ import {Link} from 'react-router-dom'
 import { bindActionCreators } from 'redux';
 function TableItem({item}) {
     return (
-            <Link to={`/product/${item.id}`}> 
+            <Link to={`/product/${item._id}`}> 
         <TableItemStyle>
         <img src={getImage(item.image)} alt="banana" />
         <div className="promo_detail">
@@ -19,7 +19,7 @@ function TableItem({item}) {
 
 const TableItemStyle = styled.div`
 cursor:pointer;
-width:50%;
+
     height:100%;    
     display:flex;
     align-items: center;

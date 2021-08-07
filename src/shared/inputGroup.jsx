@@ -8,7 +8,7 @@ function InputGroup({name,label,type,value,onChange,error}) {
             {
                 error && 
                 (
-                    <Error>{error}</Error>
+                    <p>{error}</p>
                 ) 
             }
         </FormGroup>
@@ -36,18 +36,11 @@ const FormGroup = styled.div`
             box-shadow: 0 0 3px #3797f7;
         }
     }
+    p{
+        color:#ff0707;
+        font-size:1.2rem;
+    }
 
 `
 
-const Error = styled.div`
-
-    background:rgba(251,201,201,1);
-    margin-top: 0.7rem;
-    font-size:1.2rem;
-    border-radius:5px;
-    color:#333;
-    padding:0.4rem 1rem;
-
-    /* height:4rem; */
-`
 export default InputGroup;

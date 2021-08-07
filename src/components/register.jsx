@@ -5,6 +5,12 @@ import InputGroup from '../shared/inputGroup';
 import Joi from 'joi-browser'
 import useForm from '../shared/useForm'
 import banner from '../img/banner.jpg'
+import { useHistory } from 'react-router-dom';
+import {registerUser} from '../services/user'
+import {ToastContainer} from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+import {toast} from 'react-toastify'
+import auth from '../services/auth'
 
 function Register() {
     const prop= {
@@ -30,8 +36,21 @@ function Register() {
         password:"",
         confirm:""
     }
-    const submitRegister = ()=>{
-        console.log("user is registerd")
+    const hist = useHistory()
+    const submitRegister = async ()=>{
+
+        try {
+            const res = await registerUser(data) 
+            auth.loginWithJwt(res.headers["x-auth-token"])
+            hist.push("/")
+            
+        } catch (ex) {
+           if(ex.response && ex.response.status === 400){
+               toast.error(ex.response.data)
+           }
+        
+        }
+        
     }
     const {data,submitHandler,changeHandler,errors} = useForm(
         {
@@ -45,6 +64,7 @@ function Register() {
     return (
         <>
         <Nav/>
+        <ToastContainer/>
         <RegisterContainer style={prop}>
             <h2>Register</h2>
            <form onSubmit={submitHandler}>
@@ -90,6 +110,14 @@ export const RegisterContainer = styled.div`
     padding:1rem 1.2rem;
     border-radius: 10px;
         text-align: center;
+        @media screen and (max-width:768px){
+    width:80%;
+ 
+  }
+  @media screen and (max-width:521px){
+    width:90%;
+
+}
   }
 
     button{
@@ -105,7 +133,5 @@ export const RegisterContainer = styled.div`
         
     }
 `
-
-
 
 export default Register;

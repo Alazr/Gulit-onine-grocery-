@@ -1,13 +1,14 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components'
-import {utilSort} from '../actions/utilAction'
+import { sortByUpdated } from '../store/ul'
 function SelectInput(props) {
     const dispatch = useDispatch()
-    const changeHandler = ({target}) =>{
+    const changeHandler = ({ target }) => {
         const value = target.value.split(",")
-        dispatch(utilSort(value))
-        
+
+        dispatch(sortByUpdated({ path: value[0], ord: value[1] }))
+
     }
     return (
         <SelectContainer>
@@ -39,6 +40,15 @@ const SelectContainer = styled.div`
         margin:1rem;
         font-size:1.4rem;
     }
+    @media screen and (max-width:440px){
+    
+    select{
+        width:8rem;
+        padding:0.2rem;
+    }
+    
+
+}
 `
 
 

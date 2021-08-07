@@ -6,6 +6,8 @@ import Joi from 'joi-browser'
 import useForm from '../shared/useForm'
 import {RegisterContainer} from './register'
 import banner from '../img/banner.jpg'
+import { useHistory } from 'react-router-dom';
+import auth from '../services/auth'
 
 function Login({name,value}) {
 
@@ -19,8 +21,10 @@ function Login({name,value}) {
         password:"",
 
     }
-    const submitLogin = () =>{
-        console.log("login is submited")
+    const hist = useHistory()
+    const submitLogin = async () =>{
+        await auth.login(data)
+        hist.push("/")
     }
     const loginSchema = {
         email:Joi.string().email().required(),

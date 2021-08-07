@@ -1,51 +1,80 @@
-import { truncate } from 'lodash';
 import React from 'react';
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components'
+import { mobileChanged } from '../store/ul';
 import cartImg from '../img/cart.png'
 
 function Nav(props) {
-    const {pathname,search} = useLocation()
-    const [isdropdown,setIsDropdown] = useState(false) 
-    const {cart,category} = useSelector(state=>state.products)
+    const dispatch = useDispatch()
+    const { pathname, search } = useLocation()
+    const [isdropdown, setIsDropdown] = useState(false)
+    const category = useSelector(state => state.entities.category)
+    const cart = useSelector(state => state.entities.cart)
+    const user = useSelector(state=>state.auth.currentUser)
+    const keys = Object.keys(cart)
 
-
-    const clickHandler = () =>{
+    const { isMobile } = useSelector(state => state.ui)
+    const mouseHandler = () => {
+        dispatch(mobileChanged({ value: false }))
+    }
+    const burgerHandler = () => {
+        if (isMobile) {
+            dispatch(mobileChanged({ value: false }))
+        } else {
+            dispatch(mobileChanged({ value: true }))
+        }
+    }
+    const clickHandler = () => {
         setIsDropdown(!isdropdown)
     }
-    const mouseLeaveHandler = () =>{
+    const mouseLeaveHandler = () => {
         setIsDropdown(false)
     }
     return (
-        <NavHeader className={pathname !== "/" || search ? "non-home": ''}>
+        <NavHeader className={pathname !== "/" || search ? "non-home" : ''}>
             <Navbar >
-                <h3 id="logo">Gulit</h3>
+            <Link to="/"><h3 id="logo">Gulit</h3></Link>
+                
                 <ListItems className="main_list">
                     <li><Link to="/">Home</Link></li>
                     <Dropdown  >
                         <button onClick={clickHandler} className="drop">Category</button>
-                        <ul onMouseLeave={mouseLeaveHandler} className={isdropdown? "active":""}>
+                        <ul onMouseLeave={mouseLeaveHandler} className={isdropdown ? "active" : ""}>
                             {
-                                category.map(item=>(
-                                    <li key={item.id} className="dropdown-list"><Link to={`/?category=${item.name}`} >{item.name}</Link></li>
+                                category.map(item => (
+                                    <li key={item._id} className="dropdown-list"><Link to={`/?category=${item.name}`} >{item.name}</Link></li>
                                 ))
                             }
                         </ul>
                     </Dropdown>
-                    
                 </ListItems>
-                <ListItems className="auth">
-                    <Btn className="solid"><Link to="/register">Register</Link></Btn>
+                <Burger onClick={burgerHandler} className={isMobile ? "toggle" : ""}>
+                    <span className="line1"></span>
+                    <span className="line2"></span>
+                    <span className="line3"></span>
+                </Burger>
+                <ListItems onMouseLeave={mouseHandler} className={`auth ${isMobile ? "active" : ""}`}>
+                   {!user &&
+                       <>
+                         <Btn className="solid"><Link to="/register">Register</Link></Btn>
                     <Btn className="tran"><Link to="/login">Login</Link></Btn>
+                       </>
+                   }
+                   {user &&
+                       <>
+                         <Btn className="solid"><Link to="/">{user.name}</Link></Btn>
+                    <Btn className="tran"><Link to="/logout">Logout</Link></Btn>
+                       </>
+                   }
                     <li><Link to="/cart"><Cart>
-                    <img src={cartImg} alt="cart" />
-                    {
-                        cart.length > 0 &&
-                    (<span>{cart.length}</span>)
-                    }
-                        </Cart></Link></li>
+                        <img src={cartImg} alt="cart" />
+                        {
+                            keys.length > 0 &&
+                            (<span>{keys.length}</span>)
+                        }
+                    </Cart></Link></li>
                 </ListItems>
             </Navbar>
         </NavHeader>
@@ -117,11 +146,35 @@ const Navbar = styled.nav`
     display: flex;
     align-items: center;
     justify-content: space-around;
+    flex-wrap:wrap;
     h3{
-        flex-basis:15rem;
+        flex-basis:10rem;
     }
    
-    
+    @media screen and (max-width:768px){
+    width:95%;
+    h3{
+        
+        flex-basis:10rem;
+    }
+
+}
+    @media screen and (max-width:530px){
+    /* h3{
+        
+    } */
+    width:90%;
+    justify-content: space-between;
+
+
+}
+    @media screen and (max-width:312px){
+    text-align: center;
+    h3{
+        flex-basis: 7rem;
+    }
+
+}
 `
 
 const ListItems = styled.ul`
@@ -142,6 +195,7 @@ const ListItems = styled.ul`
         }
     }
     }
+ 
    
     }
     &.auth{
@@ -152,8 +206,64 @@ const ListItems = styled.ul`
         img{
             width:70%;
             margin-top: 0.5rem;
+          
         }
     }
+    @media screen and (max-width:768px){
+        &.main_list{
+            width:20rem;
+            li{
+                margin:0 1rem;
+            }
+            }
+        &.auth{
+            /* width:20rem; */
+            li{
+                margin:0 1rem;
+                /* display: none; */
+            }
+        }
+
+    }
+    @media screen and (max-width:530px){
+    &.auth{
+        opacity: 0;
+        pointer-events: none;
+        background:rgba(0,0,0,0.5);
+    position: fixed;
+    min-height: 15rem;
+    border-radius: 10px;
+    z-index:100;
+    width:10rem;
+    right:0%;
+    top:7vh;
+    flex-direction: column;
+    justify-content: space-around;
+    transition: all 0.4s ease;
+        transform: translateY(10px);
+        .solid,.tran{
+            padding:0;
+            background: none;
+            border: none;
+            a{
+                color:white;
+            }
+        }
+        }
+        &.auth.active{
+            opacity: 1;
+            pointer-events: all;
+        transform: translateY(0px);
+        }
+
+      
+    }
+
+@media screen and (max-width:312px){
+      &.main_list{  
+          width:10rem;
+      }
+}
 `
 const Btn = styled.li`
     padding:0.5rem 1rem;
@@ -194,6 +304,7 @@ const Btn = styled.li`
 `
 const Dropdown = styled.div`
 position: relative;
+z-index: 100;
     .drop{
         margin:0 2rem;
         cursor: pointer;
@@ -247,6 +358,24 @@ position: relative;
         }
     }
 `
+const Burger = styled.div`
+    display:none;
+    cursor:pointer;
+    @media screen and (max-width:530px){
+        display: block;
+    position: relative;
+    z-index: 3;
+  span {
+    background: white;
+    padding: 0.1rem 0.8rem;
+    display: block;
+    margin: 0.3rem 0rem;
+  }
 
+  
+  }
+
+
+`
 
 export default Nav;

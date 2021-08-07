@@ -6,7 +6,7 @@ import ProductDetail from "./components/productDetail";
 import Cart from "./components/cart";
 import Register from './components/register'
 import Login from './components/login'
-
+import Logout from "./components/logout";
 function App() {
 
   return (
@@ -24,6 +24,9 @@ function App() {
         </Route>
         <Route path="/login">
             <Login/>
+        </Route>
+        <Route path="/logout">
+          <Logout/>
         </Route>
         <Route path="/" exact>
           <Home/>

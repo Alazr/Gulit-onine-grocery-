@@ -1,31 +1,26 @@
 import React from 'react';
-import { useDispatch,useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components'
-import {changeQuan} from '../actions/cartAction'
-import TableItem from '../components/tableItem';
-function Quantity({item}) {
-    
+import { itemQuantityDec, itemQuantityInc } from '../store/cart'
+function Quantity({ item }) {
 
     const dispatch = useDispatch()
-    const {cart} = useSelector(state=>state.products)
 
-    const quantityHandler = (val) =>{
-        const newCart = [...cart]
-        const idx = newCart.indexOf(item)
-        newCart[idx] = {...item}
-        if(val === "I"){
-            newCart[idx].qua++
-        }else{
-            newCart[idx].qua--
+
+    const quantityHandler = (val) => {
+        if (val === "I") {
+            dispatch(itemQuantityInc(item._id))
+        } else {
+            dispatch(itemQuantityDec(item._id))
         }
-        dispatch(changeQuan(newCart))
+        // dispatch(changeQuan(newCart))
     }
 
     return (
         <Qua>
-            <button disabled={item.qua <= 1} onClick={()=>quantityHandler("D")}>-</button>
+            <button disabled={item.qua <= 1} onClick={() => quantityHandler("D")}>-</button>
             <span>{item.qua}</span>
-            <button onClick={()=>quantityHandler("I")}>+</button>
+            <button onClick={() => quantityHandler("I")}>+</button>
         </Qua>
     );
 }
@@ -43,12 +38,17 @@ const Qua = styled.div`
         border:none;
         padding:0.5rem 1rem;
         cursor: pointer;
-        background:#ddd;
+        background:#00C23D;
+        color:#fff;
         border-radius: 5px;
         &:hover{
-        background:lightgray;
+        background:#02d846;
 
         }
+        &:disabled{
+            background: #70fc9c;
+        }
+        
     }
 `
 
